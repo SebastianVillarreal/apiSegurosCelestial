@@ -8,6 +8,7 @@ obj/
 *.user
 *.userosscache
 *.sln.docstates
+*.sln
 
 # Mono Auto Generated Files
 mono_crash.*

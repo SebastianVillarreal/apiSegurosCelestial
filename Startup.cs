@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using apiSegurosCelestial.Services;
 using marcatel_api.Extensions;
 using marcatel_api.Models;
 using marcatel_api.Services;
@@ -55,6 +56,7 @@ namespace marcatel_api
             // Get Services LB
             services.AddSingleton<LoginService>();
             services.AddSingleton<MapeosService>();
+            services.AddSingleton<PolizasService>();
             services.AddCors();
             
 
