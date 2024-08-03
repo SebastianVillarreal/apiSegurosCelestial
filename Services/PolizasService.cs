@@ -18,19 +18,19 @@ namespace apiSegurosCelestial.Services
         }
 
 
-        public List<InvAreaModel>GetAreasInv()
+        public List<PolizaModel>GetPolizas()
         {
             ArrayList parametros = new ArrayList();
             ConexionDataAccess dac = new ConexionDataAccess(connection);
-            var lista = new List<InvAreaModel>();
+            var lista = new List<PolizaModel>();
             try
             {
-                DataSet ds = dac.Fill("sp_get_areas", parametros);
+                DataSet ds = dac.Fill("GetPolizas");
                 if(ds.Tables.Count > 0)
                 {
                     foreach(DataRow dr in ds.Tables[0].Rows)
                     {
-                        lista.Add(new InvAreaModel
+                        lista.Add(new PolizaModel
                         {
                             Id = int.Parse(dr["Id"].ToString()),
                             Nombre = dr["Nombre"].ToString(),
@@ -56,7 +56,7 @@ namespace apiSegurosCelestial.Services
             int folio = 0;
             try
             {
-                parametros.Add(new SqlParameter { ParameterName = "@Consecutivo", SqlDbType = SqlDbType.VarChar, Value = poliza.Consecutivo });
+                parametros.Add(new SqlParameter { ParameterName = "@Consecutivo", SqlDbType = SqlDbType.VarChar, Value = 1 });
                 parametros.Add(new SqlParameter { ParameterName = "@Nombre", SqlDbType = SqlDbType.VarChar, Value = poliza.Nombre });
                 parametros.Add(new SqlParameter { ParameterName = "@Direccion", SqlDbType = SqlDbType.VarChar, Value = poliza.DireccionParticular  });
                 parametros.Add(new SqlParameter { ParameterName = "@Telefono", SqlDbType = SqlDbType.VarChar, Value = poliza.Telefono  });

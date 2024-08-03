@@ -9,15 +9,19 @@ namespace apiSegurosCelestial.Models
         public string Poblacion {get; set;}
         public string DomicilioCobro { get; set; }
         public string Empresa { get; set; }
-        public int TelEmpresa { get; set; }
-        public int CalleEmpresa { get; set; }
+        public string TelEmpresa { get; set; }
+        public string CalleEmpresa { get; set; }
         public string Beneficiario { get; set; }
         public string Edad { get; set; }
         public string Parentesco {get; set;}
         public string Vendedor {get; set;}
         public string Promotor {get; set;}
-        public int Consecutivo {get; set;}
 
+    }
+
+    public class PolizaModel: InsertPolizaModel
+    {
+        public int Id { get; set; }
     }
 }
 
