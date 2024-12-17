@@ -17,11 +17,11 @@ namespace marcatel_api.Controllers
     public class PolizasController: ControllerBase
     {
         private readonly PolizasService _mapeoService;
-        private readonly ILogger<MapeosController> _logger;
+        private readonly ILogger<PolizasController> _logger;
         private readonly IJwtAuthenticationService _authService;
         Encrypt enc = new Encrypt();
 
-        public PolizasController(PolizasService mapeoservice, ILogger<MapeosController> logger, IJwtAuthenticationService authService) {
+        public PolizasController(PolizasService mapeoservice, ILogger<PolizasController> logger, IJwtAuthenticationService authService) {
             _mapeoService = mapeoservice;
             _logger = logger;
        

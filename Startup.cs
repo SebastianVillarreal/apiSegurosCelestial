@@ -55,7 +55,6 @@ namespace marcatel_api
 
             // Get Services LB
             services.AddSingleton<LoginService>();
-            services.AddSingleton<MapeosService>();
             services.AddSingleton<PolizasService>();
             services.AddCors();
             
