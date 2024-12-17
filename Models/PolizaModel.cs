@@ -17,11 +17,32 @@ namespace apiSegurosCelestial.Models
         public string Vendedor {get; set;}
         public string Promotor {get; set;}
 
+
     }
 
     public class PolizaModel: InsertPolizaModel
     {
         public int Id { get; set; }
+        public string Fecha {get; set;}
+        public string FechaVencimiento {get;set;}
+    }
+
+    public class ConsecutivoPoliza
+    {
+        public int Consecutivo {get; set;}
+    }
+
+    public class InsertBeneficiarioModel
+    {
+        public int ConsecutivoPoliza {get; set;}
+        public string Nombre {get; set;}
+        public int Edad {get; set;}
+        public string Parantesco {get; set;}
+        public int usuario {get; set;}  
+    }
+    public class BeneficiarioModel : InsertBeneficiarioModel
+    {
+        public int Id {get; set;}
     }
 }
 

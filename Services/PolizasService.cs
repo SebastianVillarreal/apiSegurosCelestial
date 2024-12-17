@@ -34,6 +34,19 @@ namespace apiSegurosCelestial.Services
                         {
                             Id = int.Parse(dr["Id"].ToString()),
                             Nombre = dr["Nombre"].ToString(),
+                            DireccionParticular = dr["direccion"].ToString(),
+                            Telefono = dr["telefono"].ToString(),
+                            Colonia = dr["colonia"].ToString(),
+                            Poblacion = dr["poblacion"].ToString(),
+                            DomicilioCobro = dr["DomicilioCobro"].ToString(),
+                            Empresa = dr["Empresa"].ToString(),
+                            TelEmpresa = dr["TelefonoEmpresa"].ToString(),
+                            CalleEmpresa = dr["CalleEmpresa"].ToString(),
+                            Vendedor = dr["Vendedor"].ToString(),
+                            Promotor = dr["Promotor"].ToString(),
+                            FechaVencimiento = dr["FechaVencimiento"].ToString(),
+                            Fecha = dr["Fecha"].ToString()
+
 
                         });
                     }
@@ -85,6 +98,104 @@ namespace apiSegurosCelestial.Services
             }
             return folio;
 
+        }
+
+        public List<ConsecutivoPoliza>Getconsecutivo()
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var lista = new List<ConsecutivoPoliza>();
+            try
+            {
+                DataSet ds = dac.Fill("GetConsecutivo");
+                if(ds.Tables.Count > 0)
+                {
+                    foreach(DataRow dr in ds.Tables[0].Rows)
+                    {
+                        lista.Add(new ConsecutivoPoliza
+                        {
+                            Consecutivo = int.Parse(dr["Consecutivo"].ToString()),
+
+
+
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return lista;
+        }
+
+
+        public int InsertBeneficiario(InsertBeneficiarioModel beneficiario, int usuario)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+
+
+            int folio = 0;
+            try
+            {
+                parametros.Add(new SqlParameter { ParameterName = "@Nombre", SqlDbType = SqlDbType.VarChar, Value = beneficiario.Nombre });
+                parametros.Add(new SqlParameter { ParameterName = "@Edad", SqlDbType = SqlDbType.VarChar, Value = beneficiario.Edad });
+                parametros.Add(new SqlParameter { ParameterName = "@Parentesco", SqlDbType = SqlDbType.VarChar, Value = beneficiario.Parantesco  });
+                parametros.Add(new SqlParameter { ParameterName = "@UsuarioActualiza", SqlDbType = SqlDbType.VarChar, Value = usuario  });
+                parametros.Add(new SqlParameter { ParameterName = "@pConsecutivo", SqlDbType = SqlDbType.VarChar, Value = beneficiario.ConsecutivoPoliza  });
+
+                DataSet ds = dac.Fill("SP_InsertarBeneficiario", parametros);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        folio = int.Parse(dr["Id"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+                
+            }
+            return folio;
+
+        }
+
+        public List<BeneficiarioModel>GetBeneficiarios(int consecutivo)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var lista = new List<BeneficiarioModel>();
+            parametros.Add(new SqlParameter { ParameterName = "@Consecutivo", SqlDbType = SqlDbType.VarChar, Value = consecutivo });
+            try
+            {
+                DataSet ds = dac.Fill("SP_ObtenerBeneficiarios", parametros);
+                if(ds.Tables.Count > 0)
+                {
+                    foreach(DataRow dr in ds.Tables[0].Rows)
+                    {
+                        lista.Add(new BeneficiarioModel
+                        {
+                            Id = int.Parse(dr["Id"].ToString()),
+                            Nombre = dr["Nombre"].ToString(),
+                            Edad = int.Parse(dr["Edad"].ToString()),
+                            Parantesco = dr["Parentesco"].ToString(),
+
+
+
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return lista;
         }
     }
 }
