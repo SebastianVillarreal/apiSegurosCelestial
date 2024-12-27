@@ -25,6 +25,7 @@ namespace apiSegurosCelestial.Models
         public int Id { get; set; }
         public string Fecha {get; set;}
         public string FechaVencimiento {get;set;}
+        public int PorVencer {get; set;}
     }
 
     public class ConsecutivoPoliza

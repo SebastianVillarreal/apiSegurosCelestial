@@ -45,7 +45,8 @@ namespace apiSegurosCelestial.Services
                             Vendedor = dr["Vendedor"].ToString(),
                             Promotor = dr["Promotor"].ToString(),
                             FechaVencimiento = dr["FechaVencimiento"].ToString(),
-                            Fecha = dr["Fecha"].ToString()
+                            Fecha = dr["Fecha"].ToString(),
+                            PorVencer = int.Parse(dr["DentroDeUnMes"].ToString()),
 
 
                         });
