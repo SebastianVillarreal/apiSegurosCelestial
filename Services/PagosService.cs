@@ -53,5 +53,40 @@ namespace apiSegurosCelestial.Services
 
         }
 
+        public List<GetAbonosModel>GetPolizas(int id_poliza)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var lista = new List<GetAbonosModel>();
+            parametros.Add(new SqlParameter { ParameterName = "@IdPoliza", SqlDbType = SqlDbType.VarChar, Value = id_poliza });
+            try
+            {
+                DataSet ds = dac.Fill("ConsultarAbonosPoliza", parametros);
+                if(ds.Tables.Count > 0)
+                {
+                    foreach(DataRow dr in ds.Tables[0].Rows)
+                    {
+                        lista.Add(new GetAbonosModel
+                        {
+                            IdAbono = int.Parse(dr["IdAbono"].ToString()),
+                            MetodoPago = dr["MetodoPago"].ToString(),
+                            Referencia = dr["Referencia"].ToString(),
+                            Fecha = dr["FechaAbono"].ToString(),
+                            Monto = decimal.Parse(dr["Monto"].ToString()),
+                            IdPoliza = int.Parse(dr["IdPoliza"].ToString())
+
+
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return lista;
+        }
+
     }
 }

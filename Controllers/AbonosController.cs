@@ -53,5 +53,32 @@ namespace marcatel_api.Controllers
 
             return new JsonResult(objectResponse);
         }
+
+        [HttpGet("GetAbonosPolizas")]
+        public JsonResult GetAbonosPolizas([FromQuery] int id_poliza)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var CatClienteResponse = _mapeoService.GetPolizas(id_poliza);
+                
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = CatClienteResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+
+            return new JsonResult(objectResponse);
+        }
     }
 }
