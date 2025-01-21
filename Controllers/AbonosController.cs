@@ -60,11 +60,38 @@ namespace marcatel_api.Controllers
             var objectResponse = Helper.GetStructResponse();
             try
             {
-                var CatClienteResponse = _mapeoService.GetPolizas(id_poliza);
+                var CatClienteResponse = _mapeoService.GetAbonosPoliza(id_poliza);
                 
                 objectResponse.StatusCode = (int)HttpStatusCode.OK;
                 objectResponse.success = true;
                 objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = CatClienteResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+
+            return new JsonResult(objectResponse);
+        }
+
+        [HttpGet("GetAbonoById")]
+        public JsonResult GetAbonoById([FromQuery] int id_abono)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var CatClienteResponse = _mapeoService.GetAbonoById(id_abono);
+                
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Informacion recuperada con exito";
 
                 objectResponse.response = new
                 {

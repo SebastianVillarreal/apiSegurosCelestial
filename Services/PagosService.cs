@@ -53,7 +53,7 @@ namespace apiSegurosCelestial.Services
 
         }
 
-        public List<GetAbonosModel>GetPolizas(int id_poliza)
+        public List<GetAbonosModel>GetAbonosPoliza(int id_poliza)
         {
             ArrayList parametros = new ArrayList();
             ConexionDataAccess dac = new ConexionDataAccess(connection);
@@ -74,6 +74,45 @@ namespace apiSegurosCelestial.Services
                             Fecha = dr["FechaAbono"].ToString(),
                             Monto = decimal.Parse(dr["Monto"].ToString()),
                             IdPoliza = int.Parse(dr["IdPoliza"].ToString())
+
+
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return lista;
+        }
+
+        public List<GetAbonoById>GetAbonoById(int id_abono)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var lista = new List<GetAbonoById>();
+            parametros.Add(new SqlParameter { ParameterName = "@pId", SqlDbType = SqlDbType.VarChar, Value = id_abono });
+            try
+            {
+                DataSet ds = dac.Fill("GetAbonoById", parametros);
+                if(ds.Tables.Count > 0)
+                {
+                    foreach(DataRow dr in ds.Tables[0].Rows)
+                    {
+                        lista.Add(new GetAbonoById
+                        {
+                            IdAbono = int.Parse(dr["IdAbono"].ToString()),
+                            MetodoPago = dr["MetodoPago"].ToString(),
+                            Referencia = dr["Referencia"].ToString(),
+                            FechaAbono = dr["FechaAbono"].ToString(),
+                            MontoAbono = decimal.Parse(dr["montoAbono"].ToString()),
+                            MontoPoliza = decimal.Parse(dr["MontoPoliza"].ToString()),
+                            MontoRestante = decimal.Parse(dr["restante"].ToString()),
+                            IdPoliza = int.Parse(dr["IdPoliza"].ToString()),
+                            NombreCliente = dr["NombreCliente"].ToString(),
+                            DomicilioCliente = dr["Domicilio"].ToString(),
 
 
                         });
