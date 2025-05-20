@@ -38,34 +38,29 @@ namespace marcatel_api.Controllers
             result.Response.data = new DataResponseLogin();
             result.Response.data.Usuario = new UsuarioModel();
           
-                string cryptedPass = enc.GetSHA256(user.Userpassword);
+            string cryptedPass = enc.GetSHA256(user.Userpassword);
+            var loginResponse = _loginService.Login(user.Username, cryptedPass);
            
-            var loginResponse = _loginService.Login(user.Username, user.Userpassword);
-
-         
-           
-                if (loginResponse.Id != 0)
-                {
-                    result.StatusCode = (int)HttpStatusCode.OK;
-                    result.Error = false;
-                    result.Success = true;
-                    result.Message = "Bienvenido";
-                    result.Response.data.Usuario = loginResponse;
-                    result.Response.data.Status = true;
-                    result.Response.data.Mensaje = "Bienvenido";
-                    var token = _authService.Authenticate(user.Username, cryptedPass);
-                    result.Response.data.Token = token;
-                }
-                else
-                {
-                    result.Error = true;
-                    result.Success = false;
-                    result.Message = "Usuario o contraseña incorrecto,";
-
-                }
-            
+            if (loginResponse.Id != 0)
+            {
+                result.StatusCode = (int)HttpStatusCode.OK;
+                result.Error = false;
+                result.Success = true;
+                result.Message = "Bienvenido";
+                result.Response.data.Usuario = loginResponse;
+                result.Response.data.Status = true;
+                result.Response.data.Mensaje = "Bienvenido";
+                var token = _authService.Authenticate(user.Username, cryptedPass);
+                result.Response.data.Token = token;
+            }
+            else
+            {
+                result.StatusCode = (int)HttpStatusCode.Conflict;
+                result.Error = true;
+                result.Success = false;
+                result.Message = "Usuario o contraseña incorrecto,";
+            }
             return new JsonResult(result);
-
         }
 
         [AllowAnonymous]
@@ -79,24 +74,16 @@ namespace marcatel_api.Controllers
             result.Response.data = new DataResponseLogin();
             result.Response.data.Usuario = new UsuarioModel();
           
-                string cryptedPass = enc.GetSHA256(user.Userpassword);
-           
-           // var loginResponse = _loginService.Login(user.Username, user.Userpassword);
-
-                var objectResponse = Helper.GetStructResponse();
-                objectResponse.StatusCode = (int)HttpStatusCode.OK;
-                objectResponse.success = true;
-                objectResponse.message = "Información obtenida con exito";
-                objectResponse.response = new
-                {
-                    data = ePwd
-                };
-
-
-                
-            
+            string cryptedPass = enc.GetSHA256(user.Userpassword);
+            var objectResponse = Helper.GetStructResponse();
+            objectResponse.StatusCode = (int)HttpStatusCode.OK;
+            objectResponse.success = true;
+            objectResponse.message = "Información obtenida con exito";
+            objectResponse.response = new
+            {
+                data = ePwd
+            };
             return new JsonResult(objectResponse);
-
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
