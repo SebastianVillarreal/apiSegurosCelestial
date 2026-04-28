@@ -58,6 +58,7 @@ namespace marcatel_api
             services.AddSingleton<PolizasService>();
             services.AddSingleton<PagosService>();
             services.AddSingleton<UsuariosService>();
+            services.AddSingleton<ReportesService>();
             services.AddCors();
             
 
