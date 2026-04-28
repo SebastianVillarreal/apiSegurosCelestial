@@ -33,16 +33,11 @@ namespace marcatel_api.Controllers
             var objectResponse = Helper.GetStructResponse();
             try
             {
-                var CatClienteResponse = _mapeoService.InsertarAbonoPoliza(abono);
-                
-                objectResponse.StatusCode = (int)HttpStatusCode.OK;
-                objectResponse.success = true;
-                objectResponse.message = "Proceso completado con éxito";
-
-                objectResponse.response = new
-                {
-                    data = CatClienteResponse
-                };
+                var mensaje = _mapeoService.InsertarAbonoPoliza(abono);
+                objectResponse.StatusCode = mensaje.Contains("excede")?(int)HttpStatusCode.Conflict:(int)HttpStatusCode.OK;
+                objectResponse.success = mensaje.Contains("excede")?false:true;
+                objectResponse.message = mensaje;
+                objectResponse.response = null;
             }
             catch (System.Exception ex)
             {

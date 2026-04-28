@@ -37,7 +37,7 @@ namespace apiSegurosCelestial.Services
                 DataSet ds = dac.Fill("InsertarAbonoPoliza", parametros);
                 if (ds.Tables.Count > 0)
                 {
-                    
+
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         mensaje = dr["mensaje"].ToString();
@@ -47,10 +47,9 @@ namespace apiSegurosCelestial.Services
             catch (Exception ex)
             {
                 Console.Write(ex.Message);
-                
+
             }
             return mensaje;
-
         }
 
         public List<GetAbonosModel>GetAbonosPoliza(int id_poliza)

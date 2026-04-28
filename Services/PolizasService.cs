@@ -33,6 +33,7 @@ namespace apiSegurosCelestial.Services
                         lista.Add(new PolizaModel
                         {
                             Id = int.Parse(dr["Id"].ToString()),
+                            Consecutivo = int.Parse(dr["Consecutivo"].ToString()),
                             Nombre = dr["Nombre"].ToString(),
                             DireccionParticular = dr["direccion"].ToString(),
                             Telefono = dr["telefono"].ToString(),
@@ -42,13 +43,14 @@ namespace apiSegurosCelestial.Services
                             Empresa = dr["Empresa"].ToString(),
                             TelEmpresa = dr["TelefonoEmpresa"].ToString(),
                             CalleEmpresa = dr["CalleEmpresa"].ToString(),
+                            PlanPoliza = dr["PlanPoliza"].ToString(),
                             Vendedor = dr["Vendedor"].ToString(),
                             Promotor = dr["Promotor"].ToString(),
                             FechaVencimiento = dr["FechaVencimiento"].ToString(),
                             Fecha = dr["Fecha"].ToString(),
                             PorVencer = int.Parse(dr["DentroDeUnMes"].ToString()),
-
-
+                            FechaInicio = dr["FechaInicio"].ToString(),
+                            MontoPoliza = decimal.Parse(dr["Monto"].ToString())
                         });
                     }
                 }
@@ -82,6 +84,9 @@ namespace apiSegurosCelestial.Services
                 parametros.Add(new SqlParameter { ParameterName = "@CalleEmpresa", SqlDbType = SqlDbType.VarChar, Value = poliza.CalleEmpresa  });
                 parametros.Add(new SqlParameter { ParameterName = "@Vendedor", SqlDbType = SqlDbType.VarChar, Value = poliza.Vendedor });
                 parametros.Add(new SqlParameter { ParameterName = "@Promotor", SqlDbType = SqlDbType.VarChar, Value = poliza.Promotor });
+                parametros.Add(new SqlParameter { ParameterName = "@MontoPoliza", SqlDbType = SqlDbType.Decimal, Value = poliza.MontoPoliza });
+                parametros.Add(new SqlParameter { ParameterName = "@FechaInicio", SqlDbType = SqlDbType.VarChar, Value = poliza.FechaInicio });
+                parametros.Add(new SqlParameter { ParameterName = "@PlanPoliza", SqlDbType = SqlDbType.VarChar, Value = poliza.PlanPoliza });
                 parametros.Add(new SqlParameter { ParameterName = "@Usuario", SqlDbType = SqlDbType.VarChar, Value = usuario });
                 DataSet ds = dac.Fill("InsertPoliza", parametros);
                 if (ds.Tables.Count > 0)
@@ -100,8 +105,51 @@ namespace apiSegurosCelestial.Services
             return folio;
 
         }
+        
+        public int UpdatePoliza(InsertPolizaModel poliza, int usuario)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
 
-        public List<ConsecutivoPoliza>Getconsecutivo()
+
+            int folio = 0;
+            try
+            {
+                parametros.Add(new SqlParameter { ParameterName = "@Folio", SqlDbType = SqlDbType.VarChar, Value = poliza.Folio });
+                parametros.Add(new SqlParameter { ParameterName = "@Nombre", SqlDbType = SqlDbType.VarChar, Value = poliza.Nombre });
+                parametros.Add(new SqlParameter { ParameterName = "@Direccion", SqlDbType = SqlDbType.VarChar, Value = poliza.DireccionParticular  });
+                parametros.Add(new SqlParameter { ParameterName = "@Telefono", SqlDbType = SqlDbType.VarChar, Value = poliza.Telefono  });
+                parametros.Add(new SqlParameter { ParameterName = "@Colonia", SqlDbType = SqlDbType.VarChar, Value = poliza.Colonia });
+                parametros.Add(new SqlParameter { ParameterName = "@Poblacion", SqlDbType = SqlDbType.VarChar, Value = poliza.Poblacion  });
+                parametros.Add(new SqlParameter { ParameterName = "@DomicilioCobro", SqlDbType = SqlDbType.VarChar, Value = poliza.DomicilioCobro });
+                parametros.Add(new SqlParameter { ParameterName = "@Empresa", SqlDbType = SqlDbType.VarChar, Value = poliza.Empresa });
+                parametros.Add(new SqlParameter { ParameterName = "@TelefonoEmpresa", SqlDbType = SqlDbType.VarChar, Value = poliza.TelEmpresa });
+                parametros.Add(new SqlParameter { ParameterName = "@CalleEmpresa", SqlDbType = SqlDbType.VarChar, Value = poliza.CalleEmpresa  });
+                parametros.Add(new SqlParameter { ParameterName = "@Vendedor", SqlDbType = SqlDbType.VarChar, Value = poliza.Vendedor });
+                parametros.Add(new SqlParameter { ParameterName = "@Promotor", SqlDbType = SqlDbType.VarChar, Value = poliza.Promotor });
+                parametros.Add(new SqlParameter { ParameterName = "@MontoPoliza", SqlDbType = SqlDbType.Decimal, Value = poliza.MontoPoliza });
+                parametros.Add(new SqlParameter { ParameterName = "@FechaInicio", SqlDbType = SqlDbType.VarChar, Value = poliza.FechaInicio });
+                parametros.Add(new SqlParameter { ParameterName = "@PlanPoliza", SqlDbType = SqlDbType.VarChar, Value = poliza.PlanPoliza });
+                parametros.Add(new SqlParameter { ParameterName = "@Usuario", SqlDbType = SqlDbType.VarChar, Value = usuario });
+                DataSet ds = dac.Fill("UpdatePolizas", parametros);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        folio = int.Parse(dr["Id"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+                
+            }
+            return folio;
+
+        }
+
+        public List<ConsecutivoPoliza> Getconsecutivo()
         {
             ArrayList parametros = new ArrayList();
             ConexionDataAccess dac = new ConexionDataAccess(connection);
@@ -109,9 +157,9 @@ namespace apiSegurosCelestial.Services
             try
             {
                 DataSet ds = dac.Fill("GetConsecutivo");
-                if(ds.Tables.Count > 0)
+                if (ds.Tables.Count > 0)
                 {
-                    foreach(DataRow dr in ds.Tables[0].Rows)
+                    foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         lista.Add(new ConsecutivoPoliza
                         {
@@ -164,8 +212,42 @@ namespace apiSegurosCelestial.Services
             return folio;
 
         }
+        
+        public int UpdateBeneficiario (InsertBeneficiarioModel beneficiario, int usuario)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
 
-        public List<BeneficiarioModel>GetBeneficiarios(int consecutivo)
+
+            int folio = 0;
+            try
+            {
+                parametros.Add(new SqlParameter { ParameterName = "@Id", SqlDbType = SqlDbType.Int, Value = beneficiario.Id });
+                parametros.Add(new SqlParameter { ParameterName = "@Nombre", SqlDbType = SqlDbType.VarChar, Value = beneficiario.Nombre });
+                parametros.Add(new SqlParameter { ParameterName = "@Edad", SqlDbType = SqlDbType.VarChar, Value = beneficiario.Edad });
+                parametros.Add(new SqlParameter { ParameterName = "@Parentesco", SqlDbType = SqlDbType.VarChar, Value = beneficiario.Parantesco  });
+                parametros.Add(new SqlParameter { ParameterName = "@Estatus", SqlDbType = SqlDbType.VarChar, Value = 1  });
+                parametros.Add(new SqlParameter { ParameterName = "@UsuarioActualiza", SqlDbType = SqlDbType.VarChar, Value = usuario  });
+
+                DataSet ds = dac.Fill("SP_ActualizarBeneficiario", parametros);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        folio = int.Parse(dr["Id"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+                
+            }
+            return folio;
+
+        }
+
+        public List<BeneficiarioModel> GetBeneficiarios(int consecutivo)
         {
             ArrayList parametros = new ArrayList();
             ConexionDataAccess dac = new ConexionDataAccess(connection);
@@ -174,9 +256,9 @@ namespace apiSegurosCelestial.Services
             try
             {
                 DataSet ds = dac.Fill("SP_ObtenerBeneficiarios", parametros);
-                if(ds.Tables.Count > 0)
+                if (ds.Tables.Count > 0)
                 {
-                    foreach(DataRow dr in ds.Tables[0].Rows)
+                    foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         lista.Add(new BeneficiarioModel
                         {

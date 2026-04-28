@@ -126,7 +126,7 @@ namespace marcatel_api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
+
             // Enable middleware to serve generated swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -154,13 +154,13 @@ namespace marcatel_api
                 .AllowAnyHeader()
                 .SetIsOriginAllowed(origin => true) // allow any origin
                 .AllowCredentials()); // allow credentials
-                
+
             app.UseAuthentication();
 
             app.UseAuthorization();
 
 
-            
+
 
             app.UseEndpoints(endpoints =>
             {

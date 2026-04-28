@@ -12,19 +12,20 @@ using apiSegurosCelestial.Models;
 
 namespace marcatel_api.Controllers
 {
-   
+
     [Route("api/[controller]")]
-    public class PolizasController: ControllerBase
+    public class PolizasController : ControllerBase
     {
         private readonly PolizasService _mapeoService;
         private readonly ILogger<PolizasController> _logger;
         private readonly IJwtAuthenticationService _authService;
         Encrypt enc = new Encrypt();
 
-        public PolizasController(PolizasService mapeoservice, ILogger<PolizasController> logger, IJwtAuthenticationService authService) {
+        public PolizasController(PolizasService mapeoservice, ILogger<PolizasController> logger, IJwtAuthenticationService authService)
+        {
             _mapeoService = mapeoservice;
             _logger = logger;
-       
+
             _authService = authService;
         }
 
@@ -35,7 +36,7 @@ namespace marcatel_api.Controllers
             try
             {
                 var CatClienteResponse = _mapeoService.InsertPoliza(mapeo, 1);
-                
+
                 objectResponse.StatusCode = (int)HttpStatusCode.OK;
                 objectResponse.success = true;
                 objectResponse.message = "Proceso completado con éxito";
@@ -50,10 +51,32 @@ namespace marcatel_api.Controllers
                 Console.Write(ex.Message);
                 throw;
             }
-
-
             return new JsonResult(objectResponse);
+        }
 
+        [HttpPost("UpdatePoliza")]
+        public JsonResult UpdatePoliza([FromBody] InsertPolizaModel mapeo)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var CatClienteResponse = _mapeoService.UpdatePoliza(mapeo, 1);
+
+                objectResponse.StatusCode = (int)HttpStatusCode.Created;
+                objectResponse.success = true;
+                objectResponse.message = "Poliza actualizada correctamente";
+
+                objectResponse.response = new
+                {
+                    data = CatClienteResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+            return new JsonResult(objectResponse);
         }
 
         [HttpGet("GetPolizas")]
@@ -63,7 +86,7 @@ namespace marcatel_api.Controllers
             try
             {
                 var CatClienteResponse = _mapeoService.GetPolizas();
-                
+
                 objectResponse.StatusCode = (int)HttpStatusCode.OK;
                 objectResponse.success = true;
                 objectResponse.message = "Proceso completado con éxito";
@@ -91,7 +114,7 @@ namespace marcatel_api.Controllers
             try
             {
                 var CatClienteResponse = _mapeoService.Getconsecutivo();
-                
+
                 objectResponse.StatusCode = (int)HttpStatusCode.OK;
                 objectResponse.success = true;
                 objectResponse.message = "Proceso completado con éxito";
@@ -119,7 +142,7 @@ namespace marcatel_api.Controllers
             try
             {
                 var CatClienteResponse = _mapeoService.InsertBeneficiario(mapeo, mapeo.usuario);
-                
+
                 objectResponse.StatusCode = (int)HttpStatusCode.OK;
                 objectResponse.success = true;
                 objectResponse.message = "Proceso completado con éxito";
@@ -138,6 +161,30 @@ namespace marcatel_api.Controllers
 
             return new JsonResult(objectResponse);
 
+        }
+
+        [HttpPost("UpdateBeneficiario")]
+        public JsonResult UpdateBeneficiario([FromBody] InsertBeneficiarioModel mapeo)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var CatClienteResponse = _mapeoService.UpdateBeneficiario(mapeo, mapeo.usuario);
+                objectResponse.StatusCode = (int)HttpStatusCode.Created;
+                objectResponse.success = true;
+                objectResponse.message = "Beneficiario actualizado correctamente";
+
+                objectResponse.response = new
+                {
+                    data = CatClienteResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+            return new JsonResult(objectResponse);
         }
 
         [HttpGet("GetBeneficiarios")]
@@ -147,7 +194,7 @@ namespace marcatel_api.Controllers
             try
             {
                 var CatClienteResponse = _mapeoService.GetBeneficiarios(consecutivo);
-                
+
                 objectResponse.StatusCode = (int)HttpStatusCode.OK;
                 objectResponse.success = true;
                 objectResponse.message = "Proceso completado con éxito";
@@ -162,13 +209,7 @@ namespace marcatel_api.Controllers
                 Console.Write(ex.Message);
                 throw;
             }
-
-
             return new JsonResult(objectResponse);
-
-        }
-
-
-        
+        }      
     }
 }
