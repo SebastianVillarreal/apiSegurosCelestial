@@ -84,7 +84,11 @@ namespace apiSegurosCelestial.Services
                             MontoMensualidad = decimal.Parse(dr["MontoMensualidad"].ToString()),
                             FechaRegistro = dr["FechaRegistro"].ToString(),
                             Estatus = int.Parse(dr["Estatus"].ToString()),
-                            FechaActualizacion = dr["FechaActualizacion"].ToString()
+                            FechaActualizacion = dr["FechaActualizacion"].ToString(),
+                            DescripcionTipo = dr["TipoCertificado"].ToString(),
+                            TotalAbonado = decimal.Parse(dr["TotalAbonado"].ToString()),
+                            SaldoPendiente = decimal.Parse(dr["Restante"].ToString())
+
                         });
                     }
                 }
