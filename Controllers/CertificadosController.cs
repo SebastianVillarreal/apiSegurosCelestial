@@ -1,0 +1,80 @@
+using System;
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using apiSegurosCelestial.Models;
+using apiSegurosCelestial.Services;
+using marcatel_api.Helpers;
+using marcatel_api.Services;
+using marcatel_api.Utilities;
+
+namespace marcatel_api.Controllers
+{
+    [Route("api/[controller]")]
+    public class CertificadosController : ControllerBase
+    {
+        private readonly CertificadosService _certificadosService;
+        private readonly ILogger<CertificadosController> _logger;
+        private readonly IJwtAuthenticationService _authService;
+        Encrypt enc = new Encrypt();
+
+        public CertificadosController(CertificadosService certificadosService, ILogger<CertificadosController> logger, IJwtAuthenticationService authService)
+        {
+            _certificadosService = certificadosService;
+            _logger = logger;
+            _authService = authService;
+        }
+
+        [HttpPost("InsertCertificado")]
+        public JsonResult InsertCertificado([FromBody] InsertCertificadoModel certificado)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var insertResponse = _certificadosService.InsertCertificado(certificado);
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = insertResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
+
+        [HttpGet("GetAllCertificados")]
+        public JsonResult GetAllCertificados()
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var certificadosResponse = _certificadosService.GetAllCertificados();
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = certificadosResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
+    }
+}
