@@ -127,7 +127,8 @@ namespace apiSegurosCelestial.Services
                             MontoMensualidad = decimal.Parse(dr["MontoMensualidad"].ToString()),
                             FechaRegistro = dr["FechaRegistro"].ToString(),
                             Estatus = int.Parse(dr["Estatus"].ToString()),
-                            FechaActualizacion = dr["FechaActualizacion"].ToString()
+                            FechaActualizacion = dr["FechaActualizacion"].ToString(),
+                            VendedorNombre = dr["nombre"].ToString(),
                         });
                     }
                 }
@@ -335,7 +336,7 @@ namespace apiSegurosCelestial.Services
                 canvas.SetFont(font).SetFontSize(11);
                 canvas.ShowTextAligned(" " + certificado.Folio, 260, 545, TextAlignment.LEFT);
                 canvas.ShowTextAligned(" " + certificado.NombreCliente, 130, 430, TextAlignment.LEFT);
-                canvas.ShowTextAligned(" " + "GERARDO GONZALEZ M", 130, 380, TextAlignment.LEFT);
+                canvas.ShowTextAligned(" " + certificado.VendedorNombre, 130, 380, TextAlignment.LEFT);
                 canvas.ShowTextAligned(" " + FormatCurrency(certificado.ValorPaquete), 150, 270, TextAlignment.LEFT);
                 canvas.ShowTextAligned(" " + FormatCurrency(certificado.PagoInicial), 310, 270, TextAlignment.LEFT);
                 canvas.ShowTextAligned(" " + FormatCurrency(certificado.MontoMensualidad), 480, 270, TextAlignment.LEFT);

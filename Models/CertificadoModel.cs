@@ -20,6 +20,7 @@ namespace apiSegurosCelestial.Models
         public string DescripcionTipo { get; set; }
         public decimal TotalAbonado { get; set; }
         public decimal SaldoPendiente { get; set; }
+        public string VendedorNombre { get; set; }
     }
 
     public class InsertCertificadoAbonoModel
