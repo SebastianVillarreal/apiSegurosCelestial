@@ -9,6 +9,7 @@ namespace apiSegurosCelestial.Models
         public decimal PagoInicial { get; set; }
         public decimal MontoMensualidad { get; set; }
         public int Estatus { get; set; } = 1;
+        public int TipoCertificado { get; set; }
     }
 
     public class CertificadoModel : InsertCertificadoModel

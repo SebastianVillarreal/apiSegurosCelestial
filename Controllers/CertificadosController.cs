@@ -180,5 +180,12 @@ namespace marcatel_api.Controllers
 
             return new JsonResult(objectResponse);
         }
+
+        [HttpGet("GetCertificadoPdf")]
+        public IActionResult GetCertificadoPdf([FromQuery] int pIdCertificado)
+        {
+            var pdfBytes = _certificadosService.GenerarCertificadoPdf(pIdCertificado);
+            return File(pdfBytes, "application/pdf", "Certificado_" + pIdCertificado + ".pdf");
+        }
     }
 }

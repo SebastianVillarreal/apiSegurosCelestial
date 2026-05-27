@@ -3,7 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
 using apiSegurosCelestial.Models;
+using iText.Forms;
+using iText.Forms.Fields;
+using iText.IO.Font.Constants;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
+using iText.Layout;
+using iText.Layout.Properties;
 using marcatel_api.DataContext;
 using marcatel_api.Models;
 
@@ -33,6 +43,7 @@ namespace apiSegurosCelestial.Services
                 parametros.Add(new SqlParameter { ParameterName = "@pPagoInicial", SqlDbType = SqlDbType.Decimal, Value = certificado.PagoInicial });
                 parametros.Add(new SqlParameter { ParameterName = "@pMontoMensualidad", SqlDbType = SqlDbType.Decimal, Value = certificado.MontoMensualidad });
                 parametros.Add(new SqlParameter { ParameterName = "@pEstatus", SqlDbType = SqlDbType.Int, Value = certificado.Estatus });
+                parametros.Add(new SqlParameter { ParameterName = "@pTipo", SqlDbType = SqlDbType.Int, Value = certificado.TipoCertificado });
 
                 DataSet ds = dac.Fill("Certificados_Insert", parametros);
                 if (ds.Tables.Count > 0)
@@ -261,6 +272,108 @@ namespace apiSegurosCelestial.Services
             }
 
             return lista;
+        }
+
+        public byte[] GenerarCertificadoPdf(int idCertificado)
+        {
+            var certificados = GetCertificadoById(idCertificado);
+            if (certificados.Count == 0)
+            {
+                throw new Exception("No se encontró el certificado solicitado.");
+            }
+
+            var certificado = certificados[0];
+            var estadoCuenta = GetEstadoCuentaCertificado(idCertificado);
+            var estado = estadoCuenta.Count > 0 ? estadoCuenta[0] : null;
+
+            string rutaPlantilla = Path.Combine(Directory.GetCurrentDirectory(), "Certificado_Capillas_del_Bosque.pdf");
+            if (!File.Exists(rutaPlantilla))
+            {
+                throw new Exception("No se encontró la plantilla del certificado.");
+            }
+
+            using var outputStream = new MemoryStream();
+            using var reader = new PdfReader(rutaPlantilla);
+            using var writer = new PdfWriter(outputStream);
+            using var pdfDocument = new PdfDocument(reader, writer);
+
+            bool informacionInsertada = false;
+            var acroForm = PdfAcroForm.GetAcroForm(pdfDocument, false);
+            if (acroForm != null)
+            {
+                var fields = acroForm.GetAllFormFields();
+                if (fields != null && fields.Count > 0)
+                {
+                    informacionInsertada = true;
+
+                    SetFirstExistingField(fields, certificado.Folio.ToString(), "folio", "nofolio", "numerofolio");
+                    SetFirstExistingField(fields, certificado.NombreCliente, "nombrecliente", "cliente", "nombre");
+                    SetFirstExistingField(fields, certificado.IdVendedor.ToString(), "idvendedor", "vendedor");
+                    SetFirstExistingField(fields, FormatCurrency(certificado.ValorPaquete), "valorpaquete", "totalpaquete", "paquete");
+                    SetFirstExistingField(fields, FormatCurrency(certificado.PagoInicial), "pagoinicial", "enganche");
+                    SetFirstExistingField(fields, FormatCurrency(certificado.MontoMensualidad), "montomensualidad", "mensualidad");
+                    SetFirstExistingField(fields, estado != null ? FormatCurrency(estado.TotalAbonado) : "0.00", "totalabonado", "abonado");
+                    SetFirstExistingField(fields, estado != null ? FormatCurrency(estado.SaldoPendiente) : "0.00", "saldopendiente", "saldo");
+                    SetFirstExistingField(fields, estado != null ? estado.EstatusDescripcion : certificado.Estatus.ToString(), "estatus", "estatusdescripcion");
+                    SetFirstExistingField(fields, certificado.FechaRegistro, "fecharegistro", "fecha");
+                    SetFirstExistingField(fields, certificado.FechaActualizacion, "fechaactualizacion");
+
+                    acroForm.FlattenFields();
+                }
+            }
+
+            if (!informacionInsertada)
+            {
+                var page = pdfDocument.GetFirstPage();
+                var canvas = new Canvas(new PdfCanvas(page), page.GetPageSize());
+                var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+                canvas.SetFont(font).SetFontSize(11);
+                canvas.ShowTextAligned(" " + certificado.Folio, 260, 545, TextAlignment.LEFT);
+                canvas.ShowTextAligned(" " + certificado.NombreCliente, 130, 430, TextAlignment.LEFT);
+                canvas.ShowTextAligned(" " + "GERARDO GONZALEZ M", 130, 380, TextAlignment.LEFT);
+                canvas.ShowTextAligned(" " + FormatCurrency(certificado.ValorPaquete), 150, 270, TextAlignment.LEFT);
+                canvas.ShowTextAligned(" " + FormatCurrency(certificado.PagoInicial), 310, 270, TextAlignment.LEFT);
+                canvas.ShowTextAligned(" " + FormatCurrency(certificado.MontoMensualidad), 480, 270, TextAlignment.LEFT);
+                canvas.ShowTextAligned(" " + certificado.FechaRegistro, 110, 155, TextAlignment.LEFT);
+                canvas.Close();
+            }
+
+            pdfDocument.Close();
+            return outputStream.ToArray();
+        }
+
+        private static string FormatCurrency(decimal amount)
+        {
+            return amount.ToString("N2");
+        }
+
+        private static void SetFirstExistingField(IDictionary<string, PdfFormField> fields, string value, params string[] aliases)
+        {
+            foreach (var alias in aliases)
+            {
+                var targetField = fields.FirstOrDefault(x => NormalizeFieldName(x.Key) == NormalizeFieldName(alias));
+                if (!string.IsNullOrWhiteSpace(targetField.Key))
+                {
+                    targetField.Value.SetValue(value ?? string.Empty);
+                    return;
+                }
+            }
+        }
+
+        private static string NormalizeFieldName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return string.Empty;
+            }
+
+            return name
+                .Trim()
+                .Replace("_", string.Empty)
+                .Replace("-", string.Empty)
+                .Replace(" ", string.Empty)
+                .ToLowerInvariant();
         }
     }
 }
