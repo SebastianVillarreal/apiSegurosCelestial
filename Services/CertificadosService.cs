@@ -178,5 +178,89 @@ namespace apiSegurosCelestial.Services
 
             return response;
         }
+
+        public List<CertificadoAbonoModel> GetCertificadoAbonosByCertificado(int idCertificado)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var lista = new List<CertificadoAbonoModel>();
+
+            parametros.Add(new SqlParameter { ParameterName = "@pIdCertificado", SqlDbType = SqlDbType.Int, Value = idCertificado });
+
+            try
+            {
+                DataSet ds = dac.Fill("CertificadosAbonos_GetByCertificado", parametros);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        lista.Add(new CertificadoAbonoModel
+                        {
+                            Id = int.Parse(dr["Id"].ToString()),
+                            IdCertificado = int.Parse(dr["IdCertificado"].ToString()),
+                            FolioAbono = int.Parse(dr["FolioAbono"].ToString()),
+                            FechaAbono = dr["FechaAbono"].ToString(),
+                            Monto = decimal.Parse(dr["Monto"].ToString()),
+                            FormaPago = int.Parse(dr["FormaPago"].ToString()),
+                            FormaPagoDescripcion = dr["FormaPagoDescripcion"].ToString(),
+                            Referencia = dr["Referencia"].ToString(),
+                            Observaciones = dr["Observaciones"].ToString(),
+                            IdUsuario = string.IsNullOrWhiteSpace(dr["IdUsuario"].ToString()) ? null : (int?)int.Parse(dr["IdUsuario"].ToString()),
+                            Estatus = int.Parse(dr["Estatus"].ToString()),
+                            FechaRegistro = dr["FechaRegistro"].ToString(),
+                            FechaActualizacion = dr["FechaActualizacion"].ToString()
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return lista;
+        }
+
+        public List<CertificadoEstadoCuentaModel> GetEstadoCuentaCertificado(int idCertificado)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var lista = new List<CertificadoEstadoCuentaModel>();
+
+            parametros.Add(new SqlParameter { ParameterName = "@pIdCertificado", SqlDbType = SqlDbType.Int, Value = idCertificado });
+
+            try
+            {
+                DataSet ds = dac.Fill("Certificados_GetEstadoCuenta", parametros);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        lista.Add(new CertificadoEstadoCuentaModel
+                        {
+                            Id = int.Parse(dr["Id"].ToString()),
+                            Folio = int.Parse(dr["Folio"].ToString()),
+                            NombreCliente = dr["NombreCliente"].ToString(),
+                            IdVendedor = int.Parse(dr["IdVendedor"].ToString()),
+                            ValorPaquete = decimal.Parse(dr["ValorPaquete"].ToString()),
+                            PagoInicial = decimal.Parse(dr["PagoInicial"].ToString()),
+                            TotalAbonado = decimal.Parse(dr["TotalAbonado"].ToString()),
+                            SaldoPendiente = decimal.Parse(dr["SaldoPendiente"].ToString()),
+                            MontoMensualidad = decimal.Parse(dr["MontoMensualidad"].ToString()),
+                            Estatus = int.Parse(dr["Estatus"].ToString()),
+                            EstatusDescripcion = dr["EstatusDescripcion"].ToString(),
+                            FechaRegistro = dr["FechaRegistro"].ToString(),
+                            FechaActualizacion = dr["FechaActualizacion"].ToString()
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return lista;
+        }
     }
 }
