@@ -187,5 +187,31 @@ namespace marcatel_api.Controllers
             var pdfBytes = _certificadosService.GenerarCertificadoPdf(pIdCertificado);
             return File(pdfBytes, "application/pdf", "Certificado_" + pIdCertificado + ".pdf");
         }
+
+        [HttpGet("GetReporteAbonos")]
+        public JsonResult GetReporteAbonos([FromQuery] string pFechaInicial,  string pFechaFinal)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var reporteResponse = _certificadosService.GetReporteAbonos(pFechaInicial, pFechaFinal);
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = reporteResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
     }
 }
