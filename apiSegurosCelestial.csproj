@@ -34,4 +34,11 @@
     <PackageReference Include="itext7" Version="8.0.5" />
     <PackageReference Include="itext.bouncy-castle-adapter" Version="8.0.5" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Certificado_Capillas_del_Bosque.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
