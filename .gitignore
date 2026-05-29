@@ -1,6 +1,7 @@
 # Build Folders (you can edit these if you have a special place where you put your build files)
 bin/
 obj/
+out/
 
 # User-specific files
 *.rsuser
