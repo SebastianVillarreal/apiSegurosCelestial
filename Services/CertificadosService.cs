@@ -392,6 +392,7 @@ namespace apiSegurosCelestial.Services
                 canvas.ShowTextAligned(" " + FormatCurrency(certificado.PagoInicial), 310, 270, TextAlignment.LEFT);
                 canvas.ShowTextAligned(" " + FormatCurrency(certificado.MontoMensualidad), 480, 270, TextAlignment.LEFT);
                 canvas.ShowTextAligned(" " + certificado.FechaRegistro, 110, 155, TextAlignment.LEFT);
+                canvas.ShowTextAligned("INDEFINIDO " , 250, 155, TextAlignment.LEFT);
                 canvas.Close();
             }
 
