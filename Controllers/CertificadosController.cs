@@ -103,6 +103,32 @@ namespace marcatel_api.Controllers
             return new JsonResult(objectResponse);
         }
 
+        [HttpGet("DeleteCertificadoById")]
+        public JsonResult DeleteCertificadoById([FromQuery] int pId)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var deleteResponse = _certificadosService.DeleteCertificadoById(pId);
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Certificado actualizado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = deleteResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
+
         [HttpPost("InsertCertificadoAbono")]
         public JsonResult InsertCertificadoAbono([FromBody] InsertCertificadoAbonoModel abono)
         {

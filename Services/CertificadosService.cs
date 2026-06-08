@@ -141,6 +141,25 @@ namespace apiSegurosCelestial.Services
             return lista;
         }
 
+        public int DeleteCertificadoById(int id)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+
+            parametros.Add(new SqlParameter { ParameterName = "@pId", SqlDbType = SqlDbType.Int, Value = id });
+
+            try
+            {
+                dac.ExecuteNonQuery("Certificados_DeleteById", parametros);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return id;
+        }
+
         public CertificadoAbonoInsertResponse InsertCertificadoAbono(InsertCertificadoAbonoModel abono)
         {
             ArrayList parametros = new ArrayList();
