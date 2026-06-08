@@ -44,6 +44,8 @@ namespace apiSegurosCelestial.Services
                 parametros.Add(new SqlParameter { ParameterName = "@pMontoMensualidad", SqlDbType = SqlDbType.Decimal, Value = certificado.MontoMensualidad });
                 parametros.Add(new SqlParameter { ParameterName = "@pEstatus", SqlDbType = SqlDbType.Int, Value = certificado.Estatus });
                 parametros.Add(new SqlParameter { ParameterName = "@pTipo", SqlDbType = SqlDbType.Int, Value = certificado.TipoCertificado });
+                parametros.Add(new SqlParameter { ParameterName = "@pDireccionCliente", SqlDbType = SqlDbType.VarChar, Value = certificado.DireccionCliente });
+                parametros.Add(new SqlParameter { ParameterName = "@pTelefonoCliente", SqlDbType = SqlDbType.VarChar, Value = certificado.TelefonoCliente });
 
                 DataSet ds = dac.Fill("Certificados_Insert", parametros);
                 if (ds.Tables.Count > 0)
@@ -90,6 +92,8 @@ namespace apiSegurosCelestial.Services
                             SaldoPendiente = decimal.Parse(dr["Restante"].ToString()),
                             AbonoVencido = int.Parse(dr["AbonoVencido"].ToString()),
                             FechaUltimoAbono = dr["FechaBaseVencimiento"].ToString(),
+                            DireccionCliente = dr["DireccionCliente"].ToString(),
+                            TelefonoCliente = dr["TelefonoCliente"].ToString(),
 
                         });
                     }
