@@ -21,6 +21,8 @@ namespace apiSegurosCelestial.Models
         public decimal TotalAbonado { get; set; }
         public decimal SaldoPendiente { get; set; }
         public string VendedorNombre { get; set; }
+        public int AbonoVencido {get; set;}
+        public string FechaUltimoAbono { get; set; }
     }
 
     public class InsertCertificadoAbonoModel

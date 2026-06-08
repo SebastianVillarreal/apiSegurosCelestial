@@ -87,7 +87,9 @@ namespace apiSegurosCelestial.Services
                             FechaActualizacion = dr["FechaActualizacion"].ToString(),
                             DescripcionTipo = dr["TipoCertificado"].ToString(),
                             TotalAbonado = decimal.Parse(dr["TotalAbonado"].ToString()),
-                            SaldoPendiente = decimal.Parse(dr["Restante"].ToString())
+                            SaldoPendiente = decimal.Parse(dr["Restante"].ToString()),
+                            AbonoVencido = int.Parse(dr["AbonoVencido"].ToString()),
+                            FechaUltimoAbono = dr["FechaBaseVencimiento"].ToString(),
 
                         });
                     }
