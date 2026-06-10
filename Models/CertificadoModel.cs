@@ -65,6 +65,29 @@ namespace apiSegurosCelestial.Models
         public string FechaActualizacion { get; set; }
     }
 
+    public class CertificadoAbonoDetalleModel
+    {
+        public int Id { get; set; }
+        public int IdCertificado { get; set; }
+        public int FolioCertificado { get; set; }
+        public string NombreCliente { get; set; }
+        public decimal ValorPaquete { get; set; }
+        public decimal PagoInicial { get; set; }
+        public int FolioAbono { get; set; }
+        public string FechaAbono { get; set; }
+        public decimal Monto { get; set; }
+        public int FormaPago { get; set; }
+        public string FormaPagoDescripcion { get; set; }
+        public string Referencia { get; set; }
+        public string Observaciones { get; set; }
+        public int? IdUsuario { get; set; }
+        public int Estatus { get; set; }
+        public string FechaRegistro { get; set; }
+        public string FechaActualizacion { get; set; }
+        public decimal TotalAbonado { get; set; }
+        public decimal RestanteCertificado { get; set; }
+    }
+
     public class CertificadoEstadoCuentaModel
     {
         public int Id { get; set; }

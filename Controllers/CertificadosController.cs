@@ -181,6 +181,32 @@ namespace marcatel_api.Controllers
             return new JsonResult(objectResponse);
         }
 
+        [HttpGet("GetAbonoCertificadoById")]
+        public JsonResult GetAbonoCertificadoById([FromQuery] int pId)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var abonoResponse = _certificadosService.GetAbonoCertificadoById(pId);
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = abonoResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
+
         [HttpGet("GetEstadoCuentaCertificado")]
         public JsonResult GetEstadoCuentaCertificado([FromQuery] int pIdCertificado)
         {

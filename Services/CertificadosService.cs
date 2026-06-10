@@ -262,6 +262,54 @@ namespace apiSegurosCelestial.Services
             return lista;
         }
 
+        public List<CertificadoAbonoDetalleModel> GetAbonoCertificadoById(int id)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var lista = new List<CertificadoAbonoDetalleModel>();
+
+            parametros.Add(new SqlParameter { ParameterName = "@pId", SqlDbType = SqlDbType.Int, Value = id });
+
+            try
+            {
+                DataSet ds = dac.Fill("GetAbonoCertificadoById", parametros);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        lista.Add(new CertificadoAbonoDetalleModel
+                        {
+                            Id = int.Parse(dr["Id"].ToString()),
+                            IdCertificado = int.Parse(dr["IdCertificado"].ToString()),
+                            FolioCertificado = int.Parse(dr["FolioCertificado"].ToString()),
+                            NombreCliente = dr["NombreCliente"].ToString(),
+                            ValorPaquete = decimal.Parse(dr["ValorPaquete"].ToString()),
+                            PagoInicial = decimal.Parse(dr["PagoInicial"].ToString()),
+                            FolioAbono = int.Parse(dr["FolioAbono"].ToString()),
+                            FechaAbono = dr["FechaAbono"].ToString(),
+                            Monto = decimal.Parse(dr["Monto"].ToString()),
+                            FormaPago = int.Parse(dr["FormaPago"].ToString()),
+                            FormaPagoDescripcion = dr["FormaPagoDescripcion"].ToString(),
+                            Referencia = dr["Referencia"].ToString(),
+                            Observaciones = dr["Observaciones"].ToString(),
+                            IdUsuario = string.IsNullOrWhiteSpace(dr["IdUsuario"].ToString()) ? null : (int?)int.Parse(dr["IdUsuario"].ToString()),
+                            Estatus = int.Parse(dr["Estatus"].ToString()),
+                            FechaRegistro = dr["FechaRegistro"].ToString(),
+                            FechaActualizacion = dr["FechaActualizacion"].ToString(),
+                            TotalAbonado = decimal.Parse(dr["TotalAbonado"].ToString()),
+                            RestanteCertificado = decimal.Parse(dr["RestanteCertificado"].ToString())
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return lista;
+        }
+
         public List<CertificadoEstadoCuentaModel> GetEstadoCuentaCertificado(int idCertificado)
         {
             ArrayList parametros = new ArrayList();
