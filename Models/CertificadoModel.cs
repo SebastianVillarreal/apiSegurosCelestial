@@ -14,6 +14,26 @@ namespace apiSegurosCelestial.Models
         public string TelefonoCliente { get; set; }
     }
 
+    public class UpdateCertificadoModel
+    {
+        public int Id { get; set; }
+        public int Folio { get; set; }
+        public int IdVendedor { get; set; }
+        public string NombreCliente { get; set; }
+        public decimal ValorPaquete { get; set; }
+        public decimal PagoInicial { get; set; }
+        public decimal MontoMensualidad { get; set; }
+        public string TelefonoCliente { get; set; }
+        public string DireccionCliente { get; set; }
+        public int Estatus { get; set; }
+    }
+
+    public class CertificadoUpdateResponse
+    {
+        public string Mensaje { get; set; }
+        public int IdCertificado { get; set; }
+    }
+
     public class CertificadoModel : InsertCertificadoModel
     {
         public int Id { get; set; }

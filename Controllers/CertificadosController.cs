@@ -129,6 +129,32 @@ namespace marcatel_api.Controllers
             return new JsonResult(objectResponse);
         }
 
+        [HttpPost("UpdateCertificado")]
+        public JsonResult UpdateCertificado([FromBody] UpdateCertificadoModel certificado)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var updateResponse = _certificadosService.UpdateCertificado(certificado);
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Certificado actualizado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = updateResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
+
         [HttpPost("InsertCertificadoAbono")]
         public JsonResult InsertCertificadoAbono([FromBody] InsertCertificadoAbonoModel abono)
         {

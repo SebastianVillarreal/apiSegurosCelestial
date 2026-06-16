@@ -135,6 +135,8 @@ namespace apiSegurosCelestial.Services
                             Estatus = int.Parse(dr["Estatus"].ToString()),
                             FechaActualizacion = dr["FechaActualizacion"].ToString(),
                             VendedorNombre = dr["nombre"].ToString(),
+                            DireccionCliente = dr["DireccionCliente"].ToString(),
+                            TelefonoCliente = dr["TelefonoCliente"].ToString()
                         });
                     }
                 }
@@ -164,6 +166,43 @@ namespace apiSegurosCelestial.Services
             }
 
             return id;
+        }
+
+        public CertificadoUpdateResponse UpdateCertificado(UpdateCertificadoModel certificado)
+        {
+            ArrayList parametros = new ArrayList();
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var response = new CertificadoUpdateResponse();
+
+            try
+            {
+                parametros.Add(new SqlParameter { ParameterName = "@pId", SqlDbType = SqlDbType.Int, Value = certificado.Id });
+                parametros.Add(new SqlParameter { ParameterName = "@pFolio", SqlDbType = SqlDbType.Int, Value = certificado.Folio });
+                parametros.Add(new SqlParameter { ParameterName = "@pIdVendedor", SqlDbType = SqlDbType.Int, Value = certificado.IdVendedor });
+                parametros.Add(new SqlParameter { ParameterName = "@pNombreCliente", SqlDbType = SqlDbType.VarChar, Value = certificado.NombreCliente });
+                parametros.Add(new SqlParameter { ParameterName = "@pValorPaquete", SqlDbType = SqlDbType.Decimal, Value = certificado.ValorPaquete });
+                parametros.Add(new SqlParameter { ParameterName = "@pPagoInicial", SqlDbType = SqlDbType.Decimal, Value = certificado.PagoInicial });
+                parametros.Add(new SqlParameter { ParameterName = "@pMontoMensualidad", SqlDbType = SqlDbType.Decimal, Value = certificado.MontoMensualidad });
+                parametros.Add(new SqlParameter { ParameterName = "@pEstatus", SqlDbType = SqlDbType.Int, Value = certificado.Estatus });
+                parametros.Add(new SqlParameter { ParameterName = "@pDireccion", SqlDbType = SqlDbType.VarChar, Value = certificado.DireccionCliente });
+                parametros.Add(new SqlParameter { ParameterName = "@pTelefono", SqlDbType = SqlDbType.VarChar, Value = certificado.TelefonoCliente });
+
+                DataSet ds = dac.Fill("Certificados_Update", parametros);
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        response.Mensaje = dr["mensaje"].ToString();
+                        response.IdCertificado = int.Parse(dr["id_certificado"].ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
         }
 
         public CertificadoAbonoInsertResponse InsertCertificadoAbono(InsertCertificadoAbonoModel abono)
