@@ -442,6 +442,51 @@ namespace apiSegurosCelestial.Services
             return lista;
         }
 
+        public List<CertificadoCarteraVencidaModel> GetCarteraVencida()
+        {
+            ConexionDataAccess dac = new ConexionDataAccess(connection);
+            var lista = new List<CertificadoCarteraVencidaModel>();
+
+            try
+            {
+                DataSet ds = dac.Fill("Certificados_GetCarteraVencida");
+                if (ds.Tables.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        lista.Add(new CertificadoCarteraVencidaModel
+                        {
+                            Id = int.Parse(dr["Id"].ToString()),
+                            Folio = int.Parse(dr["Folio"].ToString()),
+                            NombreCliente = dr["NombreCliente"].ToString(),
+                            FechaRegistro = dr["FechaRegistro"].ToString(),
+                            PagoInicial = decimal.Parse(dr["PagoInicial"].ToString()),
+                            MontoMensualidad = decimal.Parse(dr["MontoMensualidad"].ToString()),
+                            TotalAbonos = decimal.Parse(dr["TotalAbonos"].ToString()),
+                            TotalPagado = decimal.Parse(dr["TotalPagado"].ToString()),
+                            FechaUltimoAbono = dr["FechaUltimoAbono"].ToString(),
+                            CantidadMovimientosAbono = int.Parse(dr["CantidadMovimientosAbono"].ToString()),
+                            MensualidadesEsperadas = int.Parse(dr["MensualidadesEsperadas"].ToString()),
+                            MensualidadesCubiertas = int.Parse(dr["MensualidadesCubiertas"].ToString()),
+                            AbonoParcialMensualidad = decimal.Parse(dr["AbonoParcialMensualidad"].ToString()),
+                            ImporteEsperado = decimal.Parse(dr["ImporteEsperado"].ToString()),
+                            MontoVencido = decimal.Parse(dr["MontoVencido"].ToString()),
+                            MensualidadesVencidas = int.Parse(dr["MensualidadesVencidas"].ToString()),
+                            FechaPrimerVencimientoPendiente = dr["FechaPrimerVencimientoPendiente"].ToString(),
+                            DiasVencidos = int.Parse(dr["DiasVencidos"].ToString()),
+                            PendienteMensualidadMasAntigua = decimal.Parse(dr["PendienteMensualidadMasAntigua"].ToString())
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return lista;
+        }
+
         public byte[] GenerarCertificadoPdf(int idCertificado)
         {
             var certificados = GetCertificadoById(idCertificado);

@@ -291,5 +291,31 @@ namespace marcatel_api.Controllers
 
             return new JsonResult(objectResponse);
         }
+
+        [HttpGet("GetCarteraVencida")]
+        public JsonResult GetCarteraVencida()
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var carteraVencidaResponse = _certificadosService.GetCarteraVencida();
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = carteraVencidaResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
     }
 }
