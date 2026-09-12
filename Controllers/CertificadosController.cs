@@ -51,6 +51,58 @@ namespace marcatel_api.Controllers
             return new JsonResult(objectResponse);
         }
 
+        [HttpPost("InsertServicioFunerario")]
+        public JsonResult InsertServicioFunerario([FromBody] InsertServicioFunerarioModel servicio)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var insertResponse = _certificadosService.InsertServicioFunerario(servicio);
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = insertResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
+
+        [HttpGet("GetServicioFunerarioById")]
+        public JsonResult GetServicioFunerarioById([FromQuery] int pId)
+        {
+            var objectResponse = Helper.GetStructResponse();
+            try
+            {
+                var servicioResponse = _certificadosService.GetServicioFunerarioById(pId);
+
+                objectResponse.StatusCode = (int)HttpStatusCode.OK;
+                objectResponse.success = true;
+                objectResponse.message = "Proceso completado con éxito";
+
+                objectResponse.response = new
+                {
+                    data = servicioResponse
+                };
+            }
+            catch (System.Exception ex)
+            {
+                Console.Write(ex.Message);
+                throw;
+            }
+
+            return new JsonResult(objectResponse);
+        }
+
         [HttpGet("GetAllCertificados")]
         public JsonResult GetAllCertificados()
         {
@@ -264,6 +316,13 @@ namespace marcatel_api.Controllers
         {
             var pdfBytes = _certificadosService.GenerarCertificadoPdf(pIdCertificado);
             return File(pdfBytes, "application/pdf", "Certificado_" + pIdCertificado + ".pdf");
+        }
+
+        [HttpGet("GetCertificadoInmediatoPdf")]
+        public IActionResult GetCertificadoInmediatoPdf([FromQuery] int pId)
+        {
+            var pdfBytes = _certificadosService.GenerarCertificadoInmediatoPdf(pId);
+            return File(pdfBytes, "application/pdf", "ServicioInmediato_" + pId + ".pdf");
         }
 
         [HttpGet("GetReporteAbonos")]

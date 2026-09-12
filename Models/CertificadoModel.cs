@@ -1,3 +1,5 @@
+using System;
+
 namespace apiSegurosCelestial.Models
 {
     public class InsertCertificadoModel
@@ -171,5 +173,71 @@ namespace apiSegurosCelestial.Models
         public string FechaPrimerVencimientoPendiente { get; set; }
         public int DiasVencidos { get; set; }
         public decimal PendienteMensualidadMasAntigua { get; set; }
+    }
+
+    public class InsertServicioFunerarioModel
+    {
+        public string ResponsableNombre { get; set; }
+        public string ResponsableParentesco { get; set; }
+        public string ResponsableTelefono { get; set; }
+        public string ResponsableCorreo { get; set; }
+        public string ResponsableDomicilio { get; set; }
+        public string ResponsableColonia { get; set; }
+        public string ResponsableCiudad { get; set; }
+        public string ResponsableCP { get; set; }
+        public string ResponsableTipoIdentificacion { get; set; }
+        public string ResponsableOtraIdentificacion { get; set; }
+        public string ResponsableNumeroIdentificacion { get; set; }
+
+        public string FallecidoNombre { get; set; }
+        public int? FallecidoEdad { get; set; }
+        public DateTime? FallecidoFechaNacimiento { get; set; }
+        public DateTime? FallecidoFechaDefuncion { get; set; }
+        public string FallecidoLugarTipo { get; set; }
+        public string FallecidoLugarOtro { get; set; }
+        public string FallecidoHospitalLugar { get; set; }
+        public string FallecidoCiudad { get; set; }
+
+        public bool TrasladoLocal { get; set; }
+        public bool TrasladoForaneo { get; set; }
+        public bool PreparacionEstetica { get; set; }
+        public bool Embalsamado { get; set; }
+        public bool Ataud { get; set; }
+        public bool SalaVelacion { get; set; }
+        public bool Cremacion { get; set; }
+        public bool Inhumacion { get; set; }
+        public bool Carroza { get; set; }
+        public bool GestionTramites { get; set; }
+        public bool Cafeteria { get; set; }
+        public bool ServicioOtro { get; set; }
+        public string ServicioOtroDescripcion { get; set; }
+
+        public string LugarTraslado { get; set; }
+        public string DestinoFinal { get; set; }
+        public DateTime? FechaServicio { get; set; }
+        public TimeSpan? HoraServicio { get; set; }
+        public string TipoServicio { get; set; }
+        public string CapillaSala { get; set; }
+        public string TiempoEstimado { get; set; }
+
+        public decimal CostoTotal { get; set; }
+        public decimal Anticipo { get; set; }
+        public string FormaPago { get; set; }
+
+        public string Observaciones { get; set; }
+        public int? Usuario { get; set; }
+        public string FechaFormato { get; set; }
+    }
+
+    public class ServicioFunerarioModel : InsertServicioFunerarioModel
+    {
+        public int Id { get; set; }
+        public decimal Saldo { get; set; }
+        public string FechaRegistro { get; set; }
+        public int? UsuarioRegistro { get; set; }
+        public string FechaModificacion { get; set; }
+        public int? UsuarioModificacion { get; set; }
+        public int Estatus { get; set; }
+        public string FechaFormato { get; set; }
     }
 }
